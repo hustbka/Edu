@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kết quả xét tuyển của Nguyễn Cảnh Huy</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 15px;
+      max-width: 600px;
+      margin: auto;
+      background-color: #f9f9f9;
+    }
+    h2 {
+      text-align: center;
+      color: darkred;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      font-size: 18px;
+      background-color: darkred;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #a00000;
+    }
+    #ketqua {
+      margin-top: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    td {
+      padding: 8px;
+      border: 1px solid #ccc;
+    }
+    td:first-child {
+      background-color: #eee;
+      font-weight: bold;
+      width: 40%;
+    }
+    a {
+      color: darkblue;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    #captchaDisplay {
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 24px;
+      color: darkred;
+      text-align: center;
+      user-select: none;
+      letter-spacing: 5px;
+      background-color: #fff0f0;
+      padding: 10px;
+      border: 2px solid darkred;
+      width: 150px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Tra cứu kết quả xét tuyển</h2>
+
+  <label for="cccd">Nhập CCCD (Căn cước công dân):</label>
+  <input type="text" id="cccd" placeholder="Nhập CCCD" />
+
+  <label>Mã xác nhận:</label>
+  <div id="captchaDisplay">Loading...</div>
+  <input type="text" id="captcha" placeholder="Nhập mã xác nhận" />
+
+  <button onclick="traCuu()">Tra cứu</button>
+
+  <div id="ketqua"></div>
+
+  <script>
+    function generateCaptcha() {
+      return Math.floor(1000 + Math.random() * 9000).toString();
+    }
+
+    let currentCaptcha = "";
+
+    function hienThiCaptcha() {
+      currentCaptcha = generateCaptcha();
+      document.getElementById('captchaDisplay').textContent = currentCaptcha;
+      document.getElementById("captcha").value = "";
+      document.getElementById("ketqua").innerHTML = "";
+    }
+
+    window.onload = function() {
+      hienThiCaptcha();
+    };
+
+    const data = {
+      "042204000213": {
+        hoTen: "Nguyễn Cảnh Huy",
+        ngaySinh: "09/02/2004",
+        truong: "ĐẠI HỌC BÁCH KHOA HÀ NỘI",
+        maTruong: "BKA",
+        maTuyenSinh: "EE1",
+        thuTuNV: "4",
+        maVanDon: "———",
+        linkVanChuyen: "———"
+      }
+    };
+
+    function traCuu() {
+      const cccd = document.getElementById("cccd").value.trim();
+      const captcha = document.getElementById("captcha").value.trim();
+      const ketqua = document.getElementById("ketqua");
+
+      if (captcha !== currentCaptcha) {
+        ketqua.innerHTML = "Mã xác nhận không đúng. Vui lòng thử lại.";
+        ketqua.style.color = "red";
+        hienThiCaptcha();
+        return;
+      }
+
+      if (data[cccd]) {
+        const d = data[cccd];
+        ketqua.innerHTML = `
+          <table>
+            <tr><td>Họ tên</td><td>${d.hoTen}</td></tr>
+            <tr><td>Ngày sinh</td><td>${d.ngaySinh}</td></tr>
+          </table>
+          <h3 style="color: darkred;">KẾT QUẢ XÉT TUYỂN: TRÚNG TUYỂN</h3>
+          <table>
+            <tr><td>Trường</td><td>${d.truong}</td></tr>
+            <tr><td>Mã trường</td><td>${d.maTruong}</td></tr>
+            <tr><td>Mã tuyển sinh</td><td>${d.maTuyenSinh}</td></tr>
+            <tr><td>Thứ tự nguyện vọng</td><td>${d.thuTuNV}</td></tr>
+            <tr><td>Mã vận đơn</td><td>${d.maVanDon}</td></tr>
+            <tr><td>Link vận chuyển</td><td>${d.linkVanChuyen}</td></tr>
+          </table>
+          <p>Chúc mừng em đã trúng tuyển vào Đại học Bách khoa Hà Nội.<br />
+          Thí sinh có thể kiểm tra trạng thái chuyển phát Giấy báo trúng tuyển qua Mã vận đơn và Link vận chuyển ở trên.</p>
+        `;
+        ketqua.style.color = "black";
+      } else {
+        ketqua.innerHTML = "Thông tin không đúng hoặc không tồn tại.";
+        ketqua.style.color = "red";
+      }
+    }
+  </script>
+</body>
+</html>
